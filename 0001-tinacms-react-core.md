@@ -1,6 +1,8 @@
 ---
 title: @tinacms/react-core
 submitter: ncphillips
+reviewers:
+-  dwalkr
 pull_request: 
 ---
 
