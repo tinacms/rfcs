@@ -6,35 +6,42 @@ reviewers:
 pull_request:
 ---
 
-## Questions
-
-- How many media providers should a user be able to have configured
-  with the CMS at the same time?
-  - Gut says 99% of the time one is enough
-  - Multiple is possible, but greatly complicates the code
-    base and the user experience
-- How will git/fs media manager handle co-located media
-- `previewSrc(???): Promise<???>` api
-- `src(???): Promise<???>` API
+Media management is a must have feature for any content management system. Thusfar, Tina development has focussed primarly on the editing and management of structured data that can be edited with basic form inputs. Only minor consideration has been given to the management of other media e.g. images, pdfs, videos, etc. The purpose fo this document is (1) to identify the basic media management operationos, (2) to cnosider where and how these operations might be accessed, and (3) to describe the architectual required for implementation.
 
 ## Media Manager UI (React Component)
 
-- List
+A user interface is required to manage media. This interface must support the following:
+
+- List available media
   - Display a preview of the file
   - Paginated
 - Upload
 - Delete
-- Support media providers
+- Insert (optional)
+- "No Media Provider" view for when the developer has not setup media on their site.
 
-## Media Manager Screen Plugin
+This UI Component will be used two ways:
 
-- Renders the UI
+- As a Screen Plugin
+- As a Dialogue
 
-## Media Manager Dialogue
+### Media Manager Screen Plugin
 
-- Accessible from Inline Editing, Fields, etc.
+This screen plugin will be added by default to all instances of TinaCMS.
+
+It will basically just render the Media Manager UI with the "Insert" option hidden.
+
+### Media Manager Dialogue
+
+Should the user need to insert an image (e.g. as a field value or as a markdown tag) they must be able to access the Media Manager. For this we need a dialogue that contains the Media Manager UI. It must be possible for the developer to progammatically open this dialogue and receive the values the user selects.
+
+Moroe concretely, the Media Manage Dialogue must:
+
+- Be accessible from Inline Editing, Fields, etc.
 - Open media manager and pass it props (i.e. disabled files, provider)
 - `onSelect(files: File[]): void` callback
+
+A potential abstract for interacting with this dialogue might be:
 
 ```ts
 cms.media.open({
@@ -44,48 +51,65 @@ cms.media.open({
 });
 ```
 
-## Image Fields
+## Fields
 
-- Select one media provider per image field
-  - Field Def
-    ```ts
-    {
-      name: "image",
-      component: "media",
-      provider: "cloudinary", // Default provider?
-    }
-    ```
-- Media Provider has `preview` method, but it can be overridden
-  - `gitMedia.preview(form, fieldName)`
-  - `{ name: "image", component: "image", provider: "cloudinary", previewSrc: gatsbyPreview }`
+Fields that use media will indirectly access the media through the `cms.media` interface.
+
+### Image Fields
+
+**Previews:** The Image Field will default to using `cms.media.previewSrc(???)` to generate the preview URL. Should the user desire a more specific method of generating the preview URL (e.g. using the results of the Gatsby image query) they may override the `previewSrc` function on the file component:
+
+```js
+{
+  name: "frontmatter.header",
+  component: "image",
+  previewSrc(form, fieldProps) {
+    let path = input.name.replace("rawFrontmatter", "frontmatter")
+    let gastbyImageNode = get(formValues, path)
+    if (!gastbyImageNode) return ""
+    return gastbyImageNode.childImageSharp.fluid.src
+  }
+}
+```
+
+This will make it easier for people to get started using media in TinaCMS quickly, while still providing the ability to choose more specific behaviour.
 
 ## TinaCMS Media API
 
+This change would add a new `media` property to the `TinaCMS` interface:
+
 ```ts
 interface TinaCMS {
-  media: MediaApi;
+  media: {
+    open(props: MediaProps): void;
+    provider: MediaProvider | null
+    setProvider(provider: MediaProvider): void
+  }
 }
 
-interface MediaAPI extends Plugins<Media> {
-  open(props: MediaProps): void;
-}
-```
-
-```ts
-import GitMediaProvider from "tinacms-media-git";
-
-cms.media.add(new GitMediaProvider());
-```
-
-## Media Provider API
-
-```ts
 interface MediaProvider {
-  list(...): Promise<any> // Returns a list of media
-  upload(file: File): Promise<any> // Upload a new file
-  delete(id: string): Promise<any> // Delete an existing file
-  preview(...): Promise<string> // Generate a preview URL
+  list(???): Promise<Media> // Returns a list of media
+  upload(file: File): Promise<Media> // Upload a new file
+  delete(id: string): Promise<Media> // Delete an existing file
+  src(???): Promise<string> // Generate a URL for a file
+  previewSrc(???): Promise<string> // Generate a preview URL for a file
 }
+
+interface Media {
+  // ???
+}
+```
+
+Setting up the CMS to support media would be as simple as:
+
+```js
+import SomeMediaProvider from "tinacms-some-media";
+
+const options = {
+  // ...
+};
+
+cms.media.setProvider(SomeMediaProvider(options));
 ```
 
 ## Package Structure
@@ -130,3 +154,9 @@ My **gatsby-config.js**
   }
 }
 ```
+
+## Remaining Questions
+
+- What is needed to generate preview URLs?
+- How should URLs-to-insert be generated?
+- What is the shape of the `Media` objects?
