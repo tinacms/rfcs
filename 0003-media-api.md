@@ -42,7 +42,7 @@ It will basically just render the Media Manager UI with the "Insert" option hidd
 
 Should the user need to insert an image (e.g. as a field value or as a markdown tag) they must be able to access the Media Manager. For this we need a dialogue that contains the Media Manager UI. It must be possible for the developer to progammatically open this dialogue and receive the values the user selects.
 
-Moroe concretely, the Media Manage Dialogue must:
+More concretely, the Media Manage Dialogue must:
 
 - Be accessible from Inline Editing, Fields, etc.
 - Open media manager and pass it props (i.e. disabled files, provider)
@@ -64,7 +64,16 @@ Fields that use media will indirectly access the media through the `cms.media` i
 
 ### Image Fields
 
-**Previews:** The Image Field will default to using `cms.media.previewSrc(???)` to generate the preview URL. Should the user desire a more specific method of generating the preview URL (e.g. using the results of the Gatsby image query) they may override the `previewSrc` function on the file component:
+**Previews:** The Image Field will default to using `cms.media.previewSrc(???)` to generate the preview URL.
+
+```js
+{
+  name: "frontmatter.header",
+  component: "image",
+}
+```
+
+Should the user desire a more specific method of generating the preview URL (e.g. using the results of the Gatsby image query) they may override the `previewSrc` function on the file component:
 
 ```js
 {
