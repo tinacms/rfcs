@@ -8,6 +8,13 @@ pull_request:
 
 Media management is a must have feature for any content management system. Thusfar, Tina development has focussed primarly on the editing and management of structured data that can be edited with basic form inputs. Only minor consideration has been given to the management of other media e.g. images, pdfs, videos, etc. The purpose fo this document is (1) to identify the basic media management operationos, (2) to cnosider where and how these operations might be accessed, and (3) to describe the architectual required for implementation.
 
+Contents:
+
+- Media Manager UI
+- Fields
+- TinaCMS Media API
+- Implementing Media Providers
+
 ## Media Manager UI (React Component)
 
 A user interface is required to manage media. This interface must support the following:
@@ -112,22 +119,39 @@ const options = {
 cms.media.setProvider(SomeMediaProvider(options));
 ```
 
-## Package Structure
+## Implementing Media Providers
 
-```js
-import Cloudinary from "tinacms-cloudinary-client";
+There are two parts required for supporting new media providers:
 
-cms.media.add(new Cloudinary());
-```
+- Client: A browser object for interacting with the server
+- Server: An express router that talks directly to the media provider API
 
-### gatsby-tinacms-cloudinary
+### Clients
+
+These browser objects that implement the `MediaProvider` interface defined above.
+
+### Server
+
+The server are implemented as Express Routers. They should proxy request to the media provider's API and handle any authentication. Expect any secrets to be on the request context.
+
+Our intention is for these to be general purpose libraries that could be used outside of TinaCMS applications.
+
+### Where to write adapters?
+
+The current thought is that the proxies will be dumb proxies that simply handle authentication and pass off all requests to the media provider API.
+
+Any code needed to adapt the media provider's API to Tina's will live in the client object.
+
+### Gatsby
+
+Here's an example of how a Gatsby plugin would then tie everything together.
 
 **gatsby-browser.js**
 
 ```js
-import Cloudinary from "tinacms-cloudinary-client";
+import Cloudinary from "tinacms-cloudinary";
 
-cms.media.add(new Cloudinary({ host: "localhost:8000/___cloudinary" }));
+cms.media.add(new Cloudinary({ endpoint: "/___cloudinary" }));
 ```
 
 **gatsby-node.js**
@@ -144,7 +168,9 @@ export const onCreateDevServer = ({ app }, options) => {
 };
 ```
 
-My **gatsby-config.js**
+The credentials would then be set in the user's gatsby-config:
+
+**gatsby-config.js**
 
 ```js
 {
