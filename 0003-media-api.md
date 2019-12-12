@@ -6,7 +6,7 @@ reviewers:
 pull_request:
 ---
 
-Media management is a must have feature for any content management system. Thusfar, Tina development has focussed primarly on the editing and management of structured data that can be edited with basic form inputs. Only minor consideration has been given to the management of other media e.g. images, pdfs, videos, etc. The purpose fo this document is (1) to identify the basic media management operationos, (2) to cnosider where and how these operations might be accessed, and (3) to describe the architectual required for implementation.
+Media management is a must have feature for any content management system. So far, Tina development has focussed primarly on the management of data that can be edited with basic form inputs. Only minor consideration has been given to the management of other media e.g. images, pdfs, videos, etc. The purpose fo this document is (1) to identify the basic media management operationos, (2) to cnosider where and how these operations might be accessed, and (3) to describe the architectual required for implementation.
 
 Contents:
 
