@@ -79,8 +79,8 @@ Should the user desire a more specific method of generating the preview URL (e.g
 {
   name: "frontmatter.header",
   component: "image",
-  previewSrc(form, fieldProps) {
-    let path = input.name.replace("rawFrontmatter", "frontmatter")
+  previewSrc(formValues, fieldProps) {
+    let path = fieldProps.input.name.replace("rawFrontmatter", "frontmatter")
     let gastbyImageNode = get(formValues, path)
     if (!gastbyImageNode) return ""
     return gastbyImageNode.childImageSharp.fluid.src
@@ -89,6 +89,30 @@ Should the user desire a more specific method of generating the preview URL (e.g
 ```
 
 This will make it easier for people to get started using media in TinaCMS quickly, while still providing the ability to choose more specific behaviour.
+
+#### How will images be uploaded?
+
+This is a very rough example of how images might be uploaded from a field:
+
+```tsx
+export const ImageField = wrapFieldsWithMeta<InputProps, ImageProps>(props => {
+  const cms = useCMS();
+
+  return (
+    <ImageUpload
+      value={props.input.value}
+      previewSrc={props.field.previewSrc(props.form.getState().values, props)}
+      onDrop={file => {
+        const mediaFile = await cms.media.upload(file, props);
+
+        props.input.onChange(cms.media.src(mediaFile, props));
+      }}
+    />
+  );
+});
+```
+
+**Why is generating the `src` url separate from uploading?** This is incase theres ever a situation where the `src` to be inserted is dependent on the content being edited. For example, for Gatsby the `src` is a relative path from the current file to the image file.
 
 ## TinaCMS Media API
 
@@ -105,7 +129,7 @@ interface TinaCMS {
 
 interface MediaProvider {
   list(???): Promise<Media> // Returns a list of media
-  upload(file: File): Promise<Media> // Upload a new file
+  upload(file: File, options: FieldProps): Promise<Media> // Upload a new file
   delete(id: string): Promise<Media> // Delete an existing file
   src(???): Promise<string> // Generate a URL for a file
   previewSrc(???): Promise<string> // Generate a preview URL for a file
