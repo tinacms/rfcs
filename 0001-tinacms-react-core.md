@@ -3,7 +3,7 @@ title: @tinacms/react-core
 submitter: ncphillips
 reviewers:
 -  dwalkr
-pull_request: 
+pull_request: https://github.com/tinacms/rfcs/pull/1
 ---
 
 # @tinacms/react-core
