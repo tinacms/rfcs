@@ -4,7 +4,7 @@ submitter:
 - dwalkr
 - ncphillips
 reviewers:
-pull_request: 
+pull_request: https://github.com/tinacms/rfcs/pull/2
 ---
 
 # Tina Server
