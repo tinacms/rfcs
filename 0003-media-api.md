@@ -3,17 +3,27 @@ title: Media API
 submitter: ncphillips
 reviewers:
   - dwalkr
-pull_request:
+pull_request: https://github.com/tinacms/rfcs/pull/3
 ---
 
-Media management is a must have feature for any content management system. So far Tina development has focussed primarly on the management of data that can be edited with basic form inputs. Only minor consideration has been given to the management of other media e.g. images, pdfs, videos, etc. The purpose fo this document is (1) to identify the basic media management operationos, (2) to cnosider where and how these operations might be accessed, and (3) to describe the architectual required for implementation.
+Media management is a must have feature for content management systems. 
+
+So far we have focussed on the management of data edited through basic form inputs. Little thought has been given to the management of other media e.g. images, pdfs, videos, etc. The purpose fo this document is to (1) identify the basic media  operationos, (2) consider how these operations might be performed, and (3) describe the high level architecture of implementation.
 
 Contents:
 
 - Media Manager UI
+  - Screen Plugin
+  - Dialogue
 - Fields
+  - How will images be uploaded?
 - TinaCMS Media API
 - Implementing Media Providers
+  - Client
+  - Server
+  - Where does adaption happen?
+  - Gatsby Example
+- Remaining Questionos
 
 ## Media Manager UI (React Component)
 
@@ -32,13 +42,13 @@ This UI Component will be used two ways:
 - As a Screen Plugin
 - As a Dialogue
 
-### Media Manager Screen Plugin
+### Screen Plugin
 
 This screen plugin will be added by default to all instances of TinaCMS.
 
 It will basically just render the Media Manager UI with the "Insert" option hidden.
 
-### Media Manager Dialogue
+### Dialogue
 
 Should the user need to insert an image (e.g. as a field value or as a markdown tag) they must be able to access the Media Manager. For this we need a dialogue that contains the Media Manager UI. It must be possible for the developer to progammatically open this dialogue and receive the values the user selects.
 
@@ -62,7 +72,6 @@ cms.media.open({
 
 Fields that use media will indirectly access the media through the `cms.media` interface.
 
-### Image Fields
 
 **Previews:** The Image Field will default to using `cms.media.previewSrc(???)` to generate the preview URL.
 
@@ -90,7 +99,7 @@ Should the user desire a more specific method of generating the preview URL (e.g
 
 This will make it easier for people to get started using media in TinaCMS quickly, while still providing the ability to choose more specific behaviour.
 
-#### How will images be uploaded?
+### How will media be uploaded?
 
 This is a very rough example of how images might be uploaded from a field:
 
@@ -159,7 +168,7 @@ There are two parts required for supporting new media providers:
 - Client: A browser object for interacting with the server
 - Server: An express router that talks directly to the media provider API
 
-### Clients
+### Client
 
 These browser objects that implement the `MediaProvider` interface defined above.
 
@@ -169,13 +178,12 @@ The server are implemented as Express Routers. They should proxy request to the 
 
 Our intention is for these to be general purpose libraries that could be used outside of TinaCMS applications.
 
-### Where to write adapters?
-
+### Where does adaption happen?
 The current thought is that the proxies will be dumb proxies that simply handle authentication and pass off all requests to the media provider API.
 
 Any code needed to adapt the media provider's API to Tina's will live in the client object.
 
-### Gatsby
+### Gatsby Example
 
 Here's an example of how a Gatsby plugin would then tie everything together.
 
