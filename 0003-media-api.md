@@ -18,7 +18,7 @@ Contents:
 - Fields
   - How will images be uploaded?
 - TinaCMS Media API
-- Implementing Media Providers
+- Implementing Media Store
   - Client
   - Server
   - Where does adaption happen?
@@ -35,7 +35,7 @@ A user interface is required to manage media. This interface must support the fo
 - Upload
 - Delete
 - Insert (optional)
-- "No Media Provider" view for when the developer has not setup media on their site.
+- "No Media Store" view for when the developer has not setup media on their site.
 
 This UI Component will be used two ways:
 
@@ -68,6 +68,7 @@ cms.media.open({
 });
 ```
 
+Maybe? `cms.media.upload()` ALIAS TO `cms.media.store.upload()`
 ### Inputs
 
 This is a note for some future work. The terms used here are somewhat lose. 
@@ -146,12 +147,11 @@ This change would add a new `media` property to the `TinaCMS` interface:
 interface TinaCMS {
   media: {
     open(props: MediaProps): void;
-    provider: MediaProvider | null
-    setProvider(provider: MediaProvider): void
+    store: MediaStore
   }
 }
 
-interface MediaProvider {
+interface MediaStore {
   list(???): Promise<Media> // Returns a list of media
   upload(file: File, options: FieldProps): Promise<Media> // Upload a new file
   delete(id: string): Promise<Media> // Delete an existing file
@@ -167,36 +167,36 @@ interface Media {
 Setting up the CMS to support media would be as simple as:
 
 ```js
-import SomeMediaProvider from "tinacms-some-media";
+import SomeMediaStore from "tinacms-some-media";
 
 const options = {
   // ...
 };
 
-cms.media.setProvider(SomeMediaProvider(options));
+cms.media.store = new SomeMediaStore(options);
 ```
 
-## Implementing Media Providers
+## Implementing Media Stores
 
-There are two parts required for supporting new media providers:
+There are two parts required for supporting new media store:
 
 - Client: A browser object for interacting with the server
-- Server: An express router that talks directly to the media provider API
+- Server: An express router that talks directly to the media store API
 
 ### Client
 
-These browser objects that implement the `MediaProvider` interface defined above.
+These browser objects that implement the `MediaStore` interface defined above.
 
 ### Server
 
-The server are implemented as Express Routers. They should proxy request to the media provider's API and handle any authentication. Expect any secrets to be on the request context.
+The server are implemented as Express Routers. They should proxy request to the media store's API and handle any authentication. Expect any secrets to be on the request context.
 
 Our intention is for these to be general purpose libraries that could be used outside of TinaCMS applications.
 
 ### Where does adaption happen?
-The current thought is that the proxies will be dumb proxies that simply handle authentication and pass off all requests to the media provider API.
+The current thought is that the proxies will be dumb proxies that simply handle authentication and pass off all requests to the media store API.
 
-Any code needed to adapt the media provider's API to Tina's will live in the client object.
+Any code needed to adapt the media store's API to Tina's will live in the client object.
 
 ### Gatsby Example
 
