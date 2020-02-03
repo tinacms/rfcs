@@ -68,6 +68,21 @@ cms.media.open({
 });
 ```
 
+### Inputs
+
+This is a note for some future work. The terms used here are somewhat lose. 
+
+By default the Media Manager will have two inputs for uploading media:
+
+1. A normal file upload dialogue
+2. A dropzone 
+
+It will be possible to add other "media-input" plugins to the Media Manager. For example, 
+one "media-input" may allow users to select an image from Unsplash. The selected image would
+then be uploaded to the site's media provider before inserting the appropriate path into the form field. 
+
+Details of this will be explored at a later date. 
+
 ## Fields
 
 Fields that use media will indirectly access the media through the `cms.media` interface.
@@ -222,8 +237,3 @@ The credentials would then be set in the user's gatsby-config:
 }
 ```
 
-## Remaining Questions
-
-- What is needed to generate preview URLs?
-- How should URLs-to-insert be generated?
-- What is the shape of the `Media` objects?
