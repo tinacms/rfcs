@@ -151,7 +151,7 @@ When the editor parses the mdx string it will come nodes with types like `h1`, `
 </Gallery>
 ```
 
-It was stated above that we're passing the rendering back to the user but how would the user render this jsx string? First we need to do is bring it to life by parsing it into valid javascript (and sanitize it), then since we have access to the registered components we can just look them up and pass the props to them. We'll wrap jsx components in a ["void" element](https://docs.slatejs.org/concepts/02-nodes#voids) - one that won't allow text to be edited inside it (more on `TinaHoverForm` below):
+It was stated above that we're passing the rendering back to the user but how would the user render this jsx string? First we need to bring it to life by parsing it into valid javascript (and sanitize it), then since we have access to the registered components we can just look them up and pass the props to them. We'll wrap jsx components in a ["void" element](https://docs.slatejs.org/concepts/02-nodes#voids) - one that won't allow text to be edited inside it (more on `TinaHoverForm` below):
 
 ```js
 // returns a big jsx ast
