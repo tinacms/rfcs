@@ -237,7 +237,7 @@ const formData = {
         },
         {
           type: "Img",
-          props: { src: "https://example.com/1.png", span: 2 }
+          props: { src: "https://example.com/2.png", span: 2 }
         }
       ]
     }
