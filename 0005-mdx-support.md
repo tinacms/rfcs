@@ -256,7 +256,7 @@ A valid submission of the hover form will result in a 2-step sequence:
 1. Transform the form data to a `jsx` string (fig 4)
 2. Insert the string into the editor as a `jsx` node (fig 8)
 
-![](./mdx-rfc.png)
+![](https://raw.githubusercontent.com/tinacms/rfcs/30feef14f33a504e97b9476cb09cef6a2f48c3c5/mdx-rfc.png)
 
 ## Further Questions
 
