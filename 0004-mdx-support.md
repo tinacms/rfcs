@@ -267,16 +267,16 @@ A valid submission of the hover form will result in a 2-step sequence:
 
 ### Unified ecosystem
 
-MDX is part of the [Unified](https://unifiedjs.com/) project - meaning it's a pluggable parser which can expand to offer many customizations, but the AST it works with differs from that of Slate's model. Slate is very flexible in this regard, it offers custom serializers so theoretically we could probably blend the editor and MDX renderer together. This would open up the doors to the editor so it could control every aspect of a markdown file, including anything a Unified plugin might control - for example a toolbar could have some sort of 'generate Table of Contents' button leverage this plugin [this plugin](https://github.com/remarkjs/remark-toc) to spit out a table of contents. There are also some amazing things it can do with [natural language processing](https://github.com/retext-project/retext), like having the ability analyze text for curse-words or grammatical mistakes.
+MDX is part of the [Unified](https://unifiedjs.com/) project - meaning it's a pluggable parser which can expand to offer many customizations, but the AST it works with differs from that of Slate's model. Slate is very flexible in this regard, it offers custom serializers so theoretically we could probably blend the editor and MDX renderer together. This would open up the doors to the editor so it could control every aspect of a markdown file, including anything a Unified plugin might control - for example a toolbar could have some sort of 'generate Table of Contents' button which would leverage [this plugin](https://github.com/remarkjs/remark-toc) to spit out a table of contents into the markdown file. There are also some amazing things it can do with [natural language processing](https://github.com/retext-project/retext), like having the ability analyze text for curse-words or grammatical mistakes.
 
 ### Tooling
 
 This proposal is based on the use of the Slate editor, though there's more tooling and familiarity around Prosemirror internally, Slate's schema-less model makes working with `jsx` nodes more simple from a beginner's perspective. More experienced users of Prosemirror can probably get this working with similar ease. An editor we work with needs to support the following:
 
+- Allow inversion of control on rendering - for now I think this is the simplest approach at having an editor match an `MDXProvider` identically
 - Provide a mechanism for listening for certain patterns (ie. Typing `<` should indicate we may want to start a JSX block) and provide our own UI around it. For example many editors will support a "tooltip"-like pop which allow you to add link attributes to an `a` tag, we need the popup to house a complex form.
 - Allow custom node types - for example every editor likely knows that a `p` tag is a paragraph node, but we need to supply a tag called `jsx`
   - Allow a section of the editor to be void - text inside a jsx tag should not be editable like the rest of the nodes, it needs to be fenced in.
-- Provide some sort of `insert` function which allows us to insert arbitrary nodes (in our case the node shape is a JSX block)
 
 ### Security
 
