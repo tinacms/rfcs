@@ -28,7 +28,7 @@ Markdown is environment-agnostic, MDX is very opinionated - and while it's "just
 
 #### Mixing presentation logic with content
 
-I think this is a valid concern in many cases - but the disconnect of headless CMS content and it's view is what makes Tina so compelling in the first place. We've been using shortcodes for years and this is a chance to make them better. It would be the job of this editor to provide helpful error boundaries but that's not outlined in this RFC.
+I think this is a valid concern in many cases - but the disconnect of headless CMS content and its view is what makes Tina so compelling in the first place. We've been using shortcodes for years and this is a chance to make them better. It would be the job of this editor to provide helpful error boundaries but that's not outlined in this RFC.
 
 ### Editor experience (ie. editors don't want to write JSX)
 
@@ -151,7 +151,7 @@ When the editor parses the mdx string it will come nodes with types like `h1`, `
 </Gallery>
 ```
 
-It was stated above that we're passing the rendering back to the user but how would the user render this jsx string? First we need to bring it to life by parsing it into valid javascript (and sanitize it), then since we have access to the registered components we can just look them up and pass the props to them. We'll wrap jsx components in a ["void" element](https://docs.slatejs.org/concepts/02-nodes#voids) - one that won't allow text to be edited inside it (more on `TinaHoverForm` below):
+It was stated above that we're passing the rendering back to the user but how would the user render this jsx string? First we need to do is bring it to life by parsing it into valid javascript (and sanitize it), then since we have access to the registered components we can just look them up and pass the props to them. We'll wrap jsx components in a ["void" element](https://docs.slatejs.org/concepts/02-nodes#voids) - one that won't allow text to be edited inside it (more on `TinaHoverForm` below):
 
 ```js
 // returns a big jsx ast
@@ -182,17 +182,17 @@ Since MDX is based on a different shape of AST than Slate's model, there could b
 - MDXAST docs - https://mdxjs.com/advanced/ast
 - A Slate to MDAST serializer - https://github.com/orbiting/mdast/tree/master/packages/slate-mdast-serializer
 
-### 2- The JSX GUI
+### 2- The JSX form GUI
 
 > When we introduce a gui to make inserting nontrivial components easy, it to some degree doesn't matter whether we use portable text or mdx or blocks (even tho, as Nolan mentioned, blocks exists at a higher altitude than those other two)Supporting mdx in a wysiwyg is still an interesting proposition for the same reason forestry is: developers don't have to change how they work if they don't want, and we can just slap a user friendly interface on top that exports to the preferred formatBut I also think this is the kind of thing that even developers would prefer to use a gui for, if it were good enough - DJ
 
-It's an awful experience in any non-IDE environmnent. One thing that most agree on is if we're going to support JSX we need a GUI which aids the user in inserting the markup. This can be a form inside a popup window which spits out a JSX string when it's schema is valid.
+It's an awful experience in any non-IDE environmnent. One thing that most agree on is if we're going to support JSX we need a GUI which aids the user in inserting the markup. This can be a form inside a popup window which spits out a JSX string when its schema is valid.
 
 #### Form schema and validation
 
-`TinaHoverForm` is an absolute-positioned node that wraps a `jsx` node. Visually it can look just like the `tinacms.org` inline-editing experience which shows a blue box around it's components. Clicking on it will popup the form in a portal.
+`TinaHoverForm` is an absolute-positioned node that wraps a `jsx` node. Visually it can look just like the `tinacms.org` inline-editing experience which shows a blue box around its components. Clicking on it will popup the form in a portal.
 
-The `schemaMap` tells our `TinaHoverForm` what type of form to build and how to validate it. An invalid form should never be passed on as `jsx`. As you can see, it's capable of taking in a schema and spitting out nested items, in this case a `Gallery` has an array of `Img` as it's children.
+The `schemaMap` tells our `TinaHoverForm` what type of form to build and how to validate it. An invalid form should never be passed on as `jsx`. As you can see, it's capable of taking in a schema and spitting out nested items, in this case a `Gallery` has an array of `Img` as its children.
 
 ```js
 // These schemas will drive our GUI form so editors don't have to write JSX
