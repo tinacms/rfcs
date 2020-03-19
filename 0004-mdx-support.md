@@ -176,7 +176,7 @@ So if this works according to plan we have an editor which visually behaves the 
 
 #### Sidenote: Differences in serialized ASTs
 
-Since MDX is based on a different shape of AST than Slate's model, there could be the potential for subtle differences in the renders - things like an extra <span /> might exist because Slate interprets text nodes differently. But Slate supports custom serializers which would take care of this, just something to be aware of
+Since MDX is based on a different shape of AST than Slate's model, there could be the potential for subtle differences in the renders - things like an extra span tag might exist because Slate interprets text nodes differently. But Slate supports custom serializers which would take care of this, just something to be aware of
 
 - Slate docs - https://docs.slatejs.org/concepts/09-serializing
 - MDXAST docs - https://mdxjs.com/advanced/ast
