@@ -151,7 +151,7 @@ When the editor parses the mdx string it will come nodes with types like `h1`, `
 </Gallery>
 ```
 
-It was stated above that we're passing the rendering back to the user (inversion of control) - but what about a jsx string? First we need to bring it to life by parsing it into valid javascript, then since we have access to the registered components we can just look them up and pass the props to them. We'll wrap jsx components in a "void" element - one that won't allow text to be edited inside it (more on `TinaHoverForm` below):
+It was stated above that we're passing the rendering back to the user but how would the user render this jsx string? First we need to bring it to life by parsing it into valid javascript (and sanitize it), then since we have access to the registered components we can just look them up and pass the props to them. We'll wrap jsx components in a ["void" element](https://docs.slatejs.org/concepts/02-nodes#voids) - one that won't allow text to be edited inside it (more on `TinaHoverForm` below):
 
 ```js
 // returns a big jsx ast
@@ -188,19 +188,19 @@ Since MDX is based on a different shape of AST than Slate's model, there could b
 
 It's an awful experience in any non-IDE environmnent. One thing that most agree on is if we're going to support JSX we need a GUI which aids the user in inserting the markup. This can be a form inside a popup window which spits out a JSX string when it's schema is valid.
 
-The form is based on the `schemaMap` provided to the component,
+#### Form schema and validation
 
-- First you pick which component you want to insert,
-- Based on that - we load the appropriate form which ensures the user has provided all values in the schema.
-- Once the form is valid it takes the form data (which is a javascript object) and transforms it into a JSX string which is stored in the exact same way as other markdown nodes are.
-- The rendering kicks in and the process described above renders JSX as real react components
+`TinaHoverForm` is an absolute-positioned node that wraps a `jsx` node. Visually it can look just like the `tinacms.org` inline-editing experience which shows a blue box around it's components. Clicking on it will popup the form in a portal.
+
+The `schemaMap` tells our `TinaHoverForm` what type of form to build and how to validate it. An invalid form should never be passed on as `jsx`. As you can see, it's capable of taking in a schema and spitting out nested items, in this case a `Gallery` has an array of `Img` as it's children.
 
 ```js
 // These schemas will drive our GUI form so editors don't have to write JSX
 const schemaMap = {
   Img: {
     props: {
-      src: { kind: "string", required: true }
+      src: { kind: "string", required: true },
+      span: { kind: "number", required: false }
     }
   },
   Gallery: {
@@ -222,7 +222,7 @@ export const MyPage = () => {
 };
 ```
 
-The `schemaMap` tells our `TinaHoverForm` what type of form to build and how to validate it. An invalid form should never be passed on as `jsx`. As you can see, it's capable of spitting out nested items, in this case a `Gallery` has an array of `Img` as it's children. A completed form might look like this:
+A completed form might look like this:
 
 ```js
 const formData = {
@@ -233,13 +233,13 @@ const formData = {
       children: [
         {
           type: "Img",
+          props: { src: "https://example.com/1.png" }
+        },
+        {
+          type: "Img",
           props: { src: "https://example.com/1.png", span: 2 }
         }
       ]
-    },
-    {
-      type: "Img",
-      props: { src: "https://example.com/1.png" }
     }
   ]
 };
@@ -255,10 +255,6 @@ const jsxString = `
 </Gallery>
 `;
 ```
-
-### Hover form editing (fig 2)
-
-The idea here is that the editing experience is mostly the same as what we're used to. All other peices of markdown editing work as usual, but you can prompt the `TinaHoverForm` by typing a `<` (similar to slash commands in Slack or Notion). Typing `<` will bring up a hover form (fig 3) which will ask you which of your registered components you'd like to insert, based on your selection the rest of the form will then be built according to the `schemaMap`
 
 A valid submission of the hover form will result in a 2-step sequence:
 
