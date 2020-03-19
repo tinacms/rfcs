@@ -38,7 +38,7 @@ In past discussions on MDX it seems that everyone agrees that editors don't want
 
 This is a 2-part proposal
 
-1. Provide an editor which passes the rendering phase back to the user (inversion of control), this way the user is responsible for node. The proof of concept was built using Slate.js
+1. Provide an editor which passes the rendering phase back to the user (inversion of control), this way the user is responsible for each node the editor renders.
 2. Provide a GUI for editing JSX - this is in the form of a customizable form schema that spits out JSX
 
 ### 1 - The Editor
@@ -46,7 +46,7 @@ This is a 2-part proposal
 Create an editor which can render user-provided components as editable nodes.
 
 ```js
-const Renderer = props => {
+const renderer = props => {
   switch (props.type) {
     case "h1":
       return <h1 {...props} />;
@@ -71,7 +71,8 @@ const JsxRenderer = props => {
   }
 };
 
-// This registers which components can be rendered and provides instructions for the GUI
+// This registers which components can be rendered and provides
+// instructions for the JSX form GUI outlined in part 2
 const schemaMap = {
   Img: {
     props: {
@@ -88,13 +89,13 @@ const schemaMap = {
 // ....
 
 <Editor
-  renderElement={Renderer}
+  renderElement={renderer}
   initialValue={mdxString}
   schemaMap={schemaMap}
 />;
 ```
 
-For non-editing states, pass the identical list of components to the a `MDXProvider`, instead of a `jsx` key, pass the custom components directly:
+For the non-editing state, pass the identical list of components to `MDXProvider`, instead of a `jsx` key, pass the custom components directly:
 
 ```js
 export const MyPage = () => {
@@ -111,7 +112,7 @@ export const MyPage = () => {
 };
 ```
 
-A component is responsible for toggling (this can obviously be another component we provide)
+A component is responsible for toggling between `normal` and `edit` modes (this can obviously be another component we provide)
 
 ```js
 export const MyPage = () => {
@@ -172,6 +173,14 @@ return (
 Now whenever our editor comes across a JSX node it can use this function to render it.
 
 So if this works according to plan we have an editor which visually behaves the same as an `MDXProvider`. You can toggle back and forth between edit and normal modes and since they're driven by the same components they should behave the same.
+
+#### Sidenote: Differences in serialized ASTs
+
+Since MDX is based on a different shape of AST than Slate's model, there could be the potential for subtle differences in the renders - things like an extra <span /> might exist because Slate interprets text nodes differently. But Slate supports custom serializers which would take care of this, just something to be aware of
+
+- Slate docs - https://docs.slatejs.org/concepts/09-serializing
+- MDXAST docs - https://mdxjs.com/advanced/ast
+- A Slate to MDAST serializer - https://github.com/orbiting/mdast/tree/master/packages/slate-mdast-serializer
 
 ### 2- The JSX GUI
 
