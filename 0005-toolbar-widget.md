@@ -43,10 +43,15 @@ These plugins will be replaced in favour of `toolbar:widget`.
 ```ts
 import { Plugin } from '@tinacms/core';
 
-interface ToolbarWidget extends Plugin {
+interface ToolbarWidget<ExtraProps = {}> extends Plugin {
   __type: 'toolbar:widget';
   weight: number;
-  Component(props: ToolbarWidgetProps): React.Element;
+  props?: ExtraProps;
+  Component(props: ToolbarWidgetProps & ExtraProps): React.Element;
+}
+
+interface ToolbarWidgetProps {
+  // Details determined as needed.
 }
 ```
 
