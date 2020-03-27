@@ -67,25 +67,23 @@ const YourSiteForm = ({ form, children }) => {
 
 ```
 
-// You will also need a few Github Specific pages to handle auth:
-```ts
-// api/create-github-access-token.ts
-import createAccessToken from '@tinacms/github-proxy-backend/create-access-token'
-
-export default createAccessToken
-
-```
-
-// You will also need a few Github Specific pages to handle auth:
+You will also need a few Github Specific pages to handle auth:
 
 ```ts
 // api/create-github-access-token.ts
+
+// Server function, which exchanges code and sets github auth cookie
+
 import createAccessToken from '@tinacms/github-proxy-backend/create-access-token'
 
 export default createAccessToken
 ```
 
 ```ts
+//pages/github/authorizing
+
+// Our Github app redirects back to this page with auth code
+
 import useGithubAuthRedirect from '@tinacms/github-auth/useGithubAuthRedirect'
 
 export default function Authorizing() {
@@ -96,6 +94,25 @@ export default function Authorizing() {
   )
 }
 
+```
+
+And add a way to enter edit-mode from within your site
+
+```ts
+import { useOpenAuthoring } from '../../open-authoring/open-authoring/OpenAuthoringProvider'
+
+export const EditLink = ({ editMode }: EditLinkProps) => {
+  const openAuthoring = useOpenAuthoring()
+  return (
+    <EditToggleButton
+      onClick={
+        editMode ? openAuthoring.exitEditMode : openAuthoring.enterEditMode
+      }
+    >
+      {editMode ? 'Exit Edit Mode' : 'Edit This Site'}
+    </EditToggleButton>
+  )
+}
 ```
 
 
