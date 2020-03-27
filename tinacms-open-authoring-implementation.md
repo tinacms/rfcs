@@ -64,7 +64,6 @@ const YourSiteForm = ({ form, children }) => {
     </>
   )
 }
-
 ```
 
 You will also need a few Github Specific pages to handle auth:
@@ -96,7 +95,8 @@ export default function Authorizing() {
 
 ```
 
-And add a way to enter edit-mode from within your site
+And add a way to enter edit-mode from within your site.
+This will first verify that we are authenticated and have a valid fork. If so, it will take us into edit-mode.
 
 ```ts
 import { useOpenAuthoring } from '../../open-authoring/open-authoring/OpenAuthoringProvider'
