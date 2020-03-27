@@ -30,7 +30,7 @@ Provides base OpenAuthoringProvider component, which manages the state for if we
 Add the root OpenAuthoringProvider component to our main layout. In this case, we will use Github Auth.
 ```ts
 // YourLayout.ts
-import authenticate from '@tinacms/github-auth/authenticate'
+import { authenticate }  from '@tinacms/github-auth'
 import OpenAuthoringProvider from '../open-authoring/open-authoring/OpenAuthoringProvider'
 
 const enterEditMode = () =>
@@ -119,5 +119,4 @@ export const EditLink = ({ editMode }: EditLinkProps) => {
   )
 }
 ```
-
 
