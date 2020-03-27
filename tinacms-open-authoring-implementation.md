@@ -22,7 +22,7 @@ Helper for describing the UI that gets shown in a modal based on the Github requ
 Provides function for requesting an auth code from Github's API, and exchanging it for an access token.
 
 ### open-authoring
-Provides base OpenAuthoringProvider component, which manages the state for if we are connected to Github / if fork exists.
+Provides base OpenAuthoringProvider component, which manages the state for if we are connected to Github / if fork exists. When we attempt to enter edit-mode, it first verifies that we are authenticated and have a valid fork, and if not we display a modal prompting to perform auth/fork actions.
 
 
 ## Implementation:
@@ -55,7 +55,6 @@ const YourLayout = ({ Component, pageProps }) => {
 
 ```ts
 // YourSiteForm.ts
-
 const YourSiteForm = ({ form, children }) => {
   return (
     <>
