@@ -75,7 +75,7 @@ Github auth callback page.
 
 // Our Github app redirects back to this page with auth code
 
-import useGithubAuthRedirect from '@tinacms/github-auth/useGithubAuthRedirect'
+import { useGithubAuthRedirect } from '@tinacms/github-auth'
 
 export default function Authorizing() {
   useGithubAuthRedirect()
@@ -119,4 +119,3 @@ export const EditLink = ({ editMode }: EditLinkProps) => {
   )
 }
 ```
-
