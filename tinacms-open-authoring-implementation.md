@@ -27,6 +27,7 @@ Provides base OpenAuthoringProvider component, which manages the state for if we
 
 ## Implementation:
 
+Add the root OpenAuthoringProvider component to our main layout. In this case, we will use Github Auth.
 ```ts
 // YourLayout.ts
 import authenticate from '@tinacms/github-auth/authenticate'
@@ -53,6 +54,7 @@ const YourLayout = ({ Component, pageProps }) => {
 }
 ```
 
+Add alerts to our forms which prompt Github-specific action when errors occur (e.g a fork no longer exists).
 ```ts
 // YourSiteForm.ts
 const YourSiteForm = ({ form, children }) => {
@@ -65,18 +67,9 @@ const YourSiteForm = ({ form, children }) => {
 }
 ```
 
-You will also need a few Github Specific pages to handle auth:
+You will also need a few Github Specific pages to handle auth...
 
-```ts
-// api/create-github-access-token.ts
-
-// Server function, which exchanges code and sets github auth cookie
-
-import createAccessToken from '@tinacms/github-proxy-backend/create-access-token'
-
-export default createAccessToken
-```
-
+Github auth callback page. 
 ```ts
 //pages/github/authorizing.tsx
 
@@ -92,6 +85,17 @@ export default function Authorizing() {
   )
 }
 
+```
+
+Server function (which sets the http-only access token cookie)
+```ts
+// api/create-github-access-token.ts
+
+// Server function, which exchanges code and sets github auth cookie
+
+import createAccessToken from '@tinacms/github-proxy-backend/create-access-token'
+
+export default createAccessToken
 ```
 
 And add a way to enter edit-mode from within your site.
