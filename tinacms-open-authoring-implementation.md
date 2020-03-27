@@ -78,7 +78,7 @@ export default createAccessToken
 ```
 
 ```ts
-//pages/github/authorizing
+//pages/github/authorizing.tsx
 
 // Our Github app redirects back to this page with auth code
 
@@ -98,6 +98,8 @@ And add a way to enter edit-mode from within your site.
 This will first verify that we are authenticated and have a valid fork. If so, it will take us into edit-mode.
 
 ```ts
+//...EditLink.tsx
+
 import { useOpenAuthoring } from '../../open-authoring/open-authoring/OpenAuthoringProvider'
 
 export const EditLink = ({ editMode }: EditLinkProps) => {
