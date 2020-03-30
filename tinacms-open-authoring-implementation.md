@@ -12,10 +12,10 @@ This RFC proposes how Open Authoring will be implemented onto a new site.
 
 ## Packages
 
-### alerts
+### errors
 Display modals with prompts when initialContent fails to load, or actions fail due to the Github-state
 
-### github-error-actions
+### github-error
 Helper for describing the UI that gets shown in a modal based on the Github request error.
 
 ### github-auth
@@ -54,15 +54,17 @@ const YourLayout = ({ Component, pageProps }) => {
 }
 ```
 
-Add alerts to our forms which prompt Github-specific action when errors occur (e.g a fork no longer exists).
+Add error handling to our forms which prompt Github-specific action when errors occur (e.g a fork no longer exists).
 ```ts
 // YourSiteForm.ts
 const YourSiteForm = ({ form, children }) => {
+
+  useOpenAuthoringErrorListener(form)
+
   return (
-    <>
-      <FormAlerts form={form} /> {/* Show form success or fail messages */}
+    <FormLayout>
       {children}
-    </>
+    </FormLayout>
   )
 }
 ```
@@ -78,7 +80,8 @@ Github auth callback page.
 import { useGithubAuthRedirect } from '@tinacms/github-auth'
 
 export default function Authorizing() {
-  useGithubAuthRedirect()
+  // Let the main app know, that we receieved an auth code from the Github redirect
+  useGithubAuthRedirect() 
 
   return (
       <h2>Authorizing with Github, Please wait...</h2>
