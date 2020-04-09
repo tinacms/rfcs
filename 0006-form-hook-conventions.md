@@ -17,13 +17,11 @@ There is one main hook:
 
 - `useForm`: Creates a form and subscribes to it's changes.
 
-When it comes to each data sources there is more variety. The pattern
-is essentially this:
+When it comes to each data sources there is more variety. The pattern is essentially this:
 
 - `use{Format}Form`: Create a Format form.
 - `useLocal{Format}Form`: Create a Format form and register with CMS.
-- `useGlobal{Format}Form`: Create a Format form and register a screen plugin thath
-  makes the form editable via the Global menu.
+- `useGlobal{Format}Form`: Create a Format form and register a screen plugin thath makes the form editable via the Global menu.
 
 In this document I will use `useFormatForm` to describe an abstract form helper.
 
@@ -80,8 +78,7 @@ use{Format}Form
 
 The root problem is that in the vast majority of cases the format of the content is of little concern. What really matters is the storage mechanism.
 
-This problem manifests itself as confusion when people think `useJsonForm` works
-for JSON coming from any data source, when it is really specific to the GitClient.
+This problem manifests itself as confusion when people think `useJsonForm` works for JSON coming from any data source, when it is really specific to the GitClient.
 
 ### Proposal
 
@@ -101,11 +98,7 @@ useHasuraForm(...)
 
 #### How Do We Deal With Different File Formats?
 
-Until now we have tried to come up with a solution to this problem by
-means of `Composition`. This proposal switches the frame from towards
-the principles of `Inversion of Control` and `Sane Defaults`. In this
-explanation I will describe a generic `useGitForm` hook. The API for
-`useGithubForm` would be essentially unchaged.
+Until now we have tried to come up with a solution to this problem by means of `Composition`. This proposal instead uses the principles of `Inversion of Control` and `Sane Defaults` to solve this problem. In this explanation I will describe a generic `useGitForm` hook. The API for `useGithubForm` would be essentially identical.
 
 The default behaviour would be to work with json:
 
@@ -133,8 +126,7 @@ const [, form] = useGitForm(jsonFile, {
 });
 ```
 
-The strings above are simply aliases to preconfigured
-Formats. You may instead pass one in explicitly:
+The strings above are simply aliases to preconfigured Formats. You may instead pass one in explicitly:
 
 ```ts
 import { useGitForm } from 'react-tinacms-git';
@@ -159,12 +151,7 @@ const [, form] = useGitForm(yamlFile, {
 
 I'm not yet convinced this is a geneic problem.
 
-It seems to me that this is only a problem for people using the
-file system as a storage medium. This includes Git, GitHub, GitLab, etc.
-For now, I happy to implement this change only at the levels of
-the `git` and `github` packages. If in the future we realize that this
-pattern is useful at a more generic level, then it can be introduced
-to `@tinacms/forms`.
+It seems to me that this is only a problem for people using the file system as a storage medium. This includes Git, GitHub, GitLab, etc. For now, I happy to implement this change only at the levels of the `git` and `github` packages. If in the future we realize that this pattern is useful at a more generic level, then it can be introduced to `@tinacms/forms`.
 
 #### Example: import { useGitForm } from "next-tinacms-git"
 
