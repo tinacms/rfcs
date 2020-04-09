@@ -42,7 +42,7 @@ With thsi proposal, the hooks for the "create" step will keep the same naming co
 use{Format}Form
 ```
 
-The names currently used for creating & registering forms would be discard. Instead they would use the following convention:
+The names currently used for creating & registering forms will be discarded. Instead they would use the following convention:
 
 ```
 useForm{Somehow}
