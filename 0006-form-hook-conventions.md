@@ -2,7 +2,7 @@
 title: Creating and Registering Forms in React
 submitter: ncphillips
 reviewers:
-pull_request: https://github.com/tinacms/rfcs/pull/5
+pull_request: https://github.com/tinacms/rfcs/pull/7
 ---
 
 # Creating & Registering Forms in React
