@@ -131,9 +131,7 @@ interface EventBus {
 
 type Listener = (event: Event, cms: CMS) => void;
 
-interface Subscription {
-  [key: string]: boolean;
-}
+type Subscription = string[]
 
 type Unsubscribe = () => void;
 ```
