@@ -91,12 +91,11 @@ cms.events.subscribe(
 **Logging Errors External Service**
 
 ```ts
-cms.events.subscribe(
-  ({ error }, cms) => {
-    cms.apis.logger.error(error);
-  },
-  ['errors']
-);
+function logErrorsExternally(event: Event, cms: CMS) {
+  cms.api.logger.error(event.error);
+}
+
+cms.events.subscribe(logErrorsExternally, ['errors']);
 ```
 
 **React Hook**
