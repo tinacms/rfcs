@@ -12,9 +12,7 @@ export default function Home({ file }) {
       </Head>
 
       <main>
-        <h1 className='title'>
-          Welcome to <a href='https://nextjs.org'>Next.js!</a>
-        </h1>
+        <h1 className='title'>{data.title}</h1>
         {/* TODO: Pull from README */}
       </main>
 
