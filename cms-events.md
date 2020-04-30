@@ -88,6 +88,27 @@ cms.events.subscribe(
 )
 ```
 
+**Dispatching Events**
+
+```ts
+cms.events.dispatch({
+  type: 'some-event-name',
+})
+```
+
+**Dispatching an "Error" Event**
+```ts
+new Form({
+  onSubmit(...) {
+    return cms.api.github.commit(...)
+      .catch(error => cms.events.dispatch({
+        type: 'errors',
+        error
+      }))
+  }
+})
+```
+
 **Logging Errors External Service**
 
 ```ts
@@ -97,6 +118,8 @@ function logErrorsExternally(event: Event, cms: CMS) {
 
 cms.events.subscribe(logErrorsExternally, ['errors']);
 ```
+
+
 
 **React Hook**
 
