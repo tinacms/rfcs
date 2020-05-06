@@ -36,7 +36,7 @@ _Note: These are example uses. The exact details of the Plugin events in particu
 **Log all events**
 
 ```ts
-cms.events.subscribe((event) => {
+cms.events.subscribe('*', (event) => {
   console.log(event);
 });
 ```
@@ -45,35 +45,21 @@ cms.events.subscribe((event) => {
 
 ```ts
 cms.events.subscribe(
+  'plugins',
   ({ plugin }) => {
     console.log(`Something happened to the plugins`);
-  },
-  ['plugins']
+  }
 );
-```
-
-**Log when any Plugin is added or removed**
-
-```ts
-cms.events.subscribe(
-  ({ plugin }) => {
-    console.log(`Added Plugin of type "${plugin.__type}" called "${plugin.name}"`
-  },
-  [
-    "plugins:add",
-    "plugins:remove",
-  ]
-)
 ```
 
 **Log when a Form Plugin is added**
 
 ```ts
 cms.events.subscribe(
+  "plugins:add:form",
   ({ plugin }) => {
     console.log(`Added form "${plugin.__type}" called "${plugin.name}"`
-  },
-  ["plugins:add:form"]
+  }
 )
 ```
 
@@ -81,10 +67,10 @@ cms.events.subscribe(
 
 ```ts
 cms.events.subscribe(
+  "plugins:*:form"
   ({ plugin }) => {
     console.log(`Added form "${plugin.__type}" called "${plugin.name}"`
-  },
-  ["plugins:*:form"]
+  }
 )
 ```
 
@@ -116,7 +102,7 @@ function logErrorsExternally(event: Event, cms: CMS) {
   cms.api.logger.error(event.error);
 }
 
-cms.events.subscribe(logErrorsExternally, ['errors']);
+cms.events.subscribe("errors", logErrorsExternally);
 ```
 
 
@@ -127,12 +113,9 @@ cms.events.subscribe(logErrorsExternally, ['errors']);
 function SidebarList() {
   const [screens, setScreens] = useState<ScreenPlugin>([]);
 
-  useEvent(
-    (event, cms) => {
-      setSreens(cms.getType('screen').all());
-    },
-    ['plugins:*:screens']
-  );
+  useCMSEvent('plugins:*:screens',(event, cms) => {
+    setSreens(cms.getType('screen').all());
+  });
 
   return (
     <ul>
@@ -148,13 +131,11 @@ function SidebarList() {
 
 ```ts
 interface EventBus {
-  subcribe(listener: Listener, subscription: Subscription): Unsubscribe;
+  subcribe(eventNamePatern: string, listener: Listener): Unsubscribe;
   dispatch(event: Event): void;
 }
 
 type Listener = (event: Event, cms: CMS) => void;
-
-type Subscription = string[]
 
 type Unsubscribe = () => void;
 ```
@@ -190,7 +171,7 @@ type FormEvents = AddForm | RemoveForm
 class MyCMS extends CMS {
   forms: {
     subscribe: (cb) => {
-      return this.events.subscribe<FormEvents>(cb, ['plugins:*:forms'])
+      return this.events.subscribe<FormEvents>('plugins:*:forms', cb)
     }
   }
 }
