@@ -1,4 +1,5 @@
 ---
+rfc: 0009
 title: CMS Events
 submitter: ncphillips
 reviewers:
@@ -44,12 +45,9 @@ cms.events.subscribe('*', (event) => {
 **Log all Plugin events**
 
 ```ts
-cms.events.subscribe(
-  'plugins',
-  ({ plugin }) => {
-    console.log(`Something happened to the plugins`);
-  }
-);
+cms.events.subscribe('plugins', ({ plugin }) => {
+  console.log(`Something happened to the plugins`);
+});
 ```
 
 **Log when a Form Plugin is added**
@@ -79,10 +77,11 @@ cms.events.subscribe(
 ```ts
 cms.events.dispatch({
   type: 'some-event-name',
-})
+});
 ```
 
 **Dispatching an "Error" Event**
+
 ```ts
 new Form({
   onSubmit(...) {
@@ -102,10 +101,8 @@ function logErrorsExternally(event: Event, cms: CMS) {
   cms.api.logger.error(event.error);
 }
 
-cms.events.subscribe("errors", logErrorsExternally);
+cms.events.subscribe('errors', logErrorsExternally);
 ```
-
-
 
 **React Hook**
 
@@ -113,7 +110,7 @@ cms.events.subscribe("errors", logErrorsExternally);
 function SidebarList() {
   const [screens, setScreens] = useState<ScreenPlugin>([]);
 
-  useCMSEvent('plugins:*:screens',(event, cms) => {
+  useCMSEvent('plugins:*:screens', (event, cms) => {
     setSreens(cms.getType('screen').all());
   });
 

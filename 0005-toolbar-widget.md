@@ -1,4 +1,5 @@
 ---
+rfc: 0005
 title: toolbar:widget
 submitter: ncphillips
 reviewers:

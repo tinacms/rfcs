@@ -1,4 +1,5 @@
 ---
+rfc: 0003
 title: Media API
 submitter: ncphillips
 reviewers:
@@ -6,9 +7,9 @@ reviewers:
 pull_request: https://github.com/tinacms/rfcs/pull/3
 ---
 
-Media management is a must have feature for content management systems. 
+Media management is a must have feature for content management systems.
 
-So far we have focussed on the management of data edited through basic form inputs. Little thought has been given to the management of other media e.g. images, pdfs, videos, etc. The purpose fo this document is to (1) identify the basic media  operationos, (2) consider how these operations might be performed, and (3) describe the high level architecture of implementation.
+So far we have focussed on the management of data edited through basic form inputs. Little thought has been given to the management of other media e.g. images, pdfs, videos, etc. The purpose fo this document is to (1) identify the basic media operationos, (2) consider how these operations might be performed, and (3) describe the high level architecture of implementation.
 
 Contents:
 
@@ -63,31 +64,31 @@ A potential abstract for interacting with this dialogue might be:
 ```ts
 cms.media.open({
   onSelect(files) {
-    console.log("Inserting", files);
-  }
+    console.log('Inserting', files);
+  },
 });
 ```
 
 Maybe? `cms.media.upload()` ALIAS TO `cms.media.store.upload()`
+
 ### Inputs
 
-This is a note for some future work. The terms used here are somewhat lose. 
+This is a note for some future work. The terms used here are somewhat lose.
 
 By default the Media Manager will have two inputs for uploading media:
 
 1. A normal file upload dialogue
-2. A dropzone 
+2. A dropzone
 
-It will be possible to add other "media-input" plugins to the Media Manager. For example, 
+It will be possible to add other "media-input" plugins to the Media Manager. For example,
 one "media-input" may allow users to select an image from Unsplash. The selected image would
-then be uploaded to the site's media provider before inserting the appropriate path into the form field. 
+then be uploaded to the site's media provider before inserting the appropriate path into the form field.
 
-Details of this will be explored at a later date. 
+Details of this will be explored at a later date.
 
 ## Fields
 
 Fields that use media will indirectly access the media through the `cms.media` interface.
-
 
 **Previews:** The Image Field will default to using `cms.media.previewSrc(???)` to generate the preview URL.
 
@@ -120,21 +121,23 @@ This will make it easier for people to get started using media in TinaCMS quickl
 This is a very rough example of how images might be uploaded from a field:
 
 ```tsx
-export const ImageField = wrapFieldsWithMeta<InputProps, ImageProps>(props => {
-  const cms = useCMS();
+export const ImageField = wrapFieldsWithMeta<InputProps, ImageProps>(
+  (props) => {
+    const cms = useCMS();
 
-  return (
-    <ImageUpload
-      value={props.input.value}
-      previewSrc={props.field.previewSrc(props.form.getState().values, props)}
-      onDrop={file => {
-        const mediaFile = await cms.media.upload(file, props);
+    return (
+      <ImageUpload
+        value={props.input.value}
+        previewSrc={props.field.previewSrc(props.form.getState().values, props)}
+        onDrop={(file) => {
+          const mediaFile = await cms.media.upload(file, props);
 
-        props.input.onChange(cms.media.src(mediaFile, props));
-      }}
-    />
-  );
-});
+          props.input.onChange(cms.media.src(mediaFile, props));
+        }}
+      />
+    );
+  }
+);
 ```
 
 **Why is generating the `src` url separate from uploading?** This is incase theres ever a situation where the `src` to be inserted is dependent on the content being edited. For example, for Gatsby the `src` is a relative path from the current file to the image file.
@@ -167,7 +170,7 @@ interface Media {
 Setting up the CMS to support media would be as simple as:
 
 ```js
-import SomeMediaStore from "tinacms-some-media";
+import SomeMediaStore from 'tinacms-some-media';
 
 const options = {
   // ...
@@ -194,6 +197,7 @@ The server are implemented as Express Routers. They should proxy request to the 
 Our intention is for these to be general purpose libraries that could be used outside of TinaCMS applications.
 
 ### Where does adaption happen?
+
 The current thought is that the proxies will be dumb proxies that simply handle authentication and pass off all requests to the media store API.
 
 Any code needed to adapt the media store's API to Tina's will live in the client object.
@@ -205,22 +209,22 @@ Here's an example of how a Gatsby plugin would then tie everything together.
 **gatsby-browser.js**
 
 ```js
-import Cloudinary from "tinacms-cloudinary";
+import Cloudinary from 'tinacms-cloudinary';
 
-cms.media.add(new Cloudinary({ endpoint: "/___cloudinary" }));
+cms.media.add(new Cloudinary({ endpoint: '/___cloudinary' }));
 ```
 
 **gatsby-node.js**
 
 ```js
-import cloudinaryRoutes from "cloudinary-proxy";
+import cloudinaryRoutes from 'cloudinary-proxy';
 
 export const onCreateDevServer = ({ app }, options) => {
-  app.use("___cloudinary", (req, res, next) => {
+  app.use('___cloudinary', (req, res, next) => {
     req.CLOUDINARY_KEY = options.API_KEY;
     next();
   });
-  app.use("___cloudinary", cloudinaryRoutes());
+  app.use('___cloudinary', cloudinaryRoutes());
 };
 ```
 
@@ -236,4 +240,3 @@ The credentials would then be set in the user's gatsby-config:
   }
 }
 ```
-

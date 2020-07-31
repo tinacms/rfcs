@@ -1,5 +1,6 @@
 ---
-title: RFC 0006 – Creating and Registering Forms in React
+rfc: 0006
+title: Creating and Registering Forms in React
 submitter: ncphillips
 reviewers:
 pull_request: https://github.com/tinacms/rfcs/pull/7

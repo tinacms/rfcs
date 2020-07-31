@@ -1,4 +1,5 @@
 ---
+rfc: 0008
 title: @tinacms/wysiwym-plugins
 submitter: jpuri
 reviewers:
