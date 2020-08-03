@@ -45,17 +45,25 @@ class CMS {
   }
 }
 ```
+
 API clients that wish to broadcast events to the CMS could do the following:
 
+```ts
+import { EventBus } from '@tinacms/core';
 
-    import { EventBus } from '@tinacms/core'
+export class MyApiClient {
+  events = new EventBus();
 
-    export class MyApiClient {
-      public events: EventBus
-      constructor() {
-        this.events = new EventBus()
-      }
+  async saveFile(data) {
+    try {
+      // Make the request
+      this.events.dispatch('myapi:save:success');
+    } catch {
+      this.events.dispatch('myapi:save:failure');
     }
+  }
+}
+```
 
 With this approach CMS Events continue to always go through the `cms.events` object, which allows subscribers to be ignorant of the origin of events. For example, any subscribers to the `github` events don't need to interact directly with an instance of `GithubClient`. This makes it possible for multiple instances of `GithubClient` to be registered with the CMS, and still all subscribers will be properly notified.
 
