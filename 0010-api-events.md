@@ -15,7 +15,7 @@ There are some core events that are used (i.e. `cms:enabled`) but there are also
 
 Before the introduction of `cms.events` these objects were totally decoupled from the `cms`. They
 defined their own behaviour and knew nothing of the `cms` itself or of any other part. However, in order
-for them to define their own events they would havebe aware of the `cms.events`.
+for them to define their own events they would have to be aware of `cms.events`.
 
 This RFC attempts to address the above issue for API clients by proposing a change to the way APIs
 are registered with the CMS. The current `CMS#registerApi` method is incredibly simple:
