@@ -3,7 +3,7 @@ rfc: 0010
 title: API Events
 submitter: ncphillips
 reviewers:
-pull_request:
+pull_request: 11
 ---
 
 In RFC 0009 we introduced `cms.events` which gives the ability to listen for events happening within the CMS.
