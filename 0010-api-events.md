@@ -38,7 +38,7 @@ The change to the `CMS` class would essentially be as follows:
 ```diff
 class CMS {
   registerApi(name: string, api: any): void {
-+   if (api instanceof EventBus) {
++   if (api.events instanceof EventBus) {
 +     api.events.subscribe(this.events.dispatch);
 +   }
     this.api[name] = api;
