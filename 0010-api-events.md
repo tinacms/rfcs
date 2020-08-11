@@ -2,7 +2,7 @@
 rfc: 0010
 title: API Events
 submitter: ncphillips
-reviewers:
+reviewers: dwalkr
 pull_request: 11
 ---
 
