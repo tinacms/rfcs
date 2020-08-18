@@ -4,7 +4,7 @@ title: Mapping Events to Alerts
 
 The `cms.alerts` is a high level abstraction built on top of `cms.events`. While `cms.events` is a generic system for communicating about events happening in the CMS, the `cms.alerts` are specifically meant for communicating with the end users.
 
-The current use of `cms.alerts` is problematic for sereral reasons:
+The current use of `cms.alerts` is problematic for several reasons:
 
 - Calls to `cms.alerts` are littered throughout the codebase and inconsistent.
 - It's not possible to translate alerts without overriding the function that contains them.
@@ -111,10 +111,10 @@ class TinaCMS extends CMS {
     // ...
 
     this.events.subscribe('*', (event) => {
-      const alert = this._eventsToAlert[event.type];
+      const toAlert = this._eventsToAlert[event.type];
 
-      if (alert) {
-        const { level, message, timeout } = alert;
+      if (toAlert) {
+        const { level, message, timeout } = toAlert(event);
 
         this.alerts.add(level, message, timeout);
       }
