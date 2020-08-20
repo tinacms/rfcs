@@ -36,7 +36,7 @@ the resulting Alert shown to the user.
 
 ### Default Alert Maps in APIs
 
-Any API registered with the CMS could define default alerts for it's events.
+Any API registered with the CMS could define default alerts for its events.
 
 ```ts
 class Freezer {
