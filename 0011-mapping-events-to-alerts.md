@@ -139,7 +139,7 @@ class Alerts {
       if (toAlert) {
         const { level, message, timeout } = toAlert(event);
 
-        this.alerts.add(level, message, timeout);
+        this.add(level, message, timeout);
       }
     });
   }
@@ -149,6 +149,7 @@ class Alerts {
       ...eventsToAlerts,
     };
   }
+  // ...
 }
 ```
 
