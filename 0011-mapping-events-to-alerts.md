@@ -107,17 +107,15 @@ interface EventsToAlerts {
   [key: string]: ToAlert;
 }
 
-type ToAlert = (
-  event: CMSEvent
-) => {
+type ToAlert = (event: CMSEvent) => Alert;
+
+interface Alert {
   message: string;
   level?: AlertLevel;
   timeout?: number;
-};
+}
 
 class TinaCMS extends CMS {
-  private _eventsToAlerts: EventsToAlerts = {};
-
   constructor(options: TinaCMSOptions) {
     // ...
 
@@ -128,18 +126,15 @@ class TinaCMS extends CMS {
     // ...
 
     if (this.api.alerts) {
-      this._eventsToAlerts = {
-        ...this._eventsToAlerts,
-        ...this.api.alerts,
-      };
+      this.alerts.setMap(this.api.alerts);
     }
   }
 }
 
 class Alerts {
-  constructor(private events: EventBus, alerts = {}) {
+  constructor(private events: EventBus, private eventsToAlerts = {}) {
     this.events.subscribe('*', (event) => {
-      const toAlert = this._eventsToAlert[event.type];
+      const toAlert = this.eventsToAlerts[event.type];
 
       if (toAlert) {
         const { level, message, timeout } = toAlert(event);
@@ -147,6 +142,12 @@ class Alerts {
         this.alerts.add(level, message, timeout);
       }
     });
+  }
+  setMap(eventsToAlerts) {
+    this.eventsToAlerts = {
+      ...this.eventsToAlerts,
+      ...eventsToAlerts,
+    };
   }
 }
 ```
