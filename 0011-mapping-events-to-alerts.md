@@ -87,6 +87,17 @@ const cms = new TinaCMS({
 });
 ```
 
+### Updating AlertMaps Dynamically
+
+```typescript
+cms.alerts.setMap({
+  'freezer:found': {
+    level: 'success',
+    message: 'Dig in!',
+  },
+});
+```
+
 ## Implementation Pseudocode
 
 This would require a change to the effect of:
@@ -110,15 +121,7 @@ class TinaCMS extends CMS {
   constructor(options: TinaCMSOptions) {
     // ...
 
-    this.events.subscribe('*', (event) => {
-      const toAlert = this._eventsToAlert[event.type];
-
-      if (toAlert) {
-        const { level, message, timeout } = toAlert(event);
-
-        this.alerts.add(level, message, timeout);
-      }
-    });
+    this.alerts = new Alerts(this.events, options.alerts);
   }
 
   registerApi(name: string, api: any) {
@@ -130,6 +133,20 @@ class TinaCMS extends CMS {
         ...this.api.alerts,
       };
     }
+  }
+}
+
+class Alerts {
+  constructor(private events: EventBus, alerts = {}) {
+    this.events.subscribe('*', (event) => {
+      const toAlert = this._eventsToAlert[event.type];
+
+      if (toAlert) {
+        const { level, message, timeout } = toAlert(event);
+
+        this.alerts.add(level, message, timeout);
+      }
+    });
   }
 }
 ```
