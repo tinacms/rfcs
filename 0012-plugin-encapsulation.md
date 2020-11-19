@@ -198,7 +198,7 @@ export default function App() {
 
   return (
     <TinaCMSProvider cms={cms}>
-      <Page status={status} error={error} />
+      <Page />
     </TinaCMSProvider>
   )
 }
