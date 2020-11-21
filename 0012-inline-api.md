@@ -2,7 +2,7 @@
 title: Smaller Inline API Footprint
 ---
 
-The inline API is cumbersome and inserts a lot of DOM nodes that don't have any relevance to non-edit mode renders. There's a desire to clean up the work the user might have so they're production code is clean.
+The inline API is cumbersome and inserts a lot of DOM nodes that don't have any relevance to non-edit mode renders. There's a desire to clean up the work the user might have so their production code is clean.
 
 #### What this RFC is not
 
@@ -96,7 +96,7 @@ const useInlineTextField = ({ name }) => {
       onClick: () => setActive(!active),
       children: (
         <>
-          {/* Children is just a text node - but we're controlling it with contenteditable in this phawse */}
+          {/* Children is just a text node - but we're controlling it with contenteditable in this phase */}
           {props.children}
           {ref.current && (
             <ControlTextPortal
