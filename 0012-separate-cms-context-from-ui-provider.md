@@ -25,7 +25,7 @@ I propose we add a few new APIs to support advanced use cases...
 
 ### The TinaCMSProvider
 
-The TinaCMSProvider will take responsibility for holding the instance of the CMS in context, and is the `useCMS` hook will fetch context. This can wrap the entire React app while having almost 0 impact on bundle size:
+The TinaCMSProvider will take responsibility for holding the instance of the CMS in context, and is what the `useCMS` hook will fetch context under the hood. This can wrap the entire React app while having almost 0 impact on bundle size:
 
 
 ```
@@ -44,7 +44,7 @@ export function MyApp() {
 
 The `TinaUIProvider` will take responsibility for rendering the Tina React UI, and UI context.
 
-This will allow a user to wrap a sub-section of an application devoted to editing with editing logic, while leaving the `TinaCMSProvider` at the top of the application tree.
+This will allow a user to wrap a sub-section of an application devoted to editing with editing logic, while leaving the `TinaCMSProvider` at the top of the application tree. This approach will greatly reduce bundle sizes by only importing and downloading Tina UI on routes that need it.
 
 
 ### Changes to TinaProvider
