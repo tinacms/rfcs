@@ -86,3 +86,7 @@ export function EditButton() {
   )
 }
 ```
+
+## Conclusion
+
+For general use cases, this will require no change in our docs. But for advanced use cases, such as an enterprise trying to separate all write logic from their production endpoints, this will make this trivial to do.
