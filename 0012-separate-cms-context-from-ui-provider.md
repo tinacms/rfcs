@@ -16,6 +16,7 @@ This is problematic for a few reasons:
 
 - It's not possible to wrap an app with an instance of Tina without downloading all of the Tina React UI, UI context, and business logic.
 - It's not possible to use Tina logic in app without downloading all of the React UI, UI context, and business logic.
+- The Tina UI adds around 150mb of JS to a page.
 
 ## Propose API
 
