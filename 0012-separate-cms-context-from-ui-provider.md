@@ -29,27 +29,27 @@ The TinaCMSProvider will take responsibility for holding the instance of the CMS
 
 
 ```
-export function MyApp() {
+export function MyApp({children}) {
  const cms = useMemo(() => new TinaCMS());
  
  return (
    <TinaCMSProvider cms={cms}>
-     {...}
+     {children}
    </TinaCMSProvider>
  )
 }
 ```
 
-### The TinaUIProvider
+### The TinaUI Provider
 
-The `TinaUIProvider` will take responsibility for rendering the Tina React UI, and UI context.
+The `TinaUI` Provider will take responsibility for rendering the Tina React UI, and UI context.
 
 This will allow a user to wrap a sub-section of an application devoted to editing with editing logic, while leaving the `TinaCMSProvider` at the top of the application tree. This approach will greatly reduce bundle sizes by only importing and downloading Tina UI on routes that need it.
 
 
 ### Changes to TinaProvider
 
-The API of `TinaProvider` wont change, but under the hood, it will now setup the `TinaCMSProvider` and `TinaUIProvider` for the user, leading to 0 breaking changes.
+The API of `TinaProvider` wont change, but under the hood, it will now setup the `TinaCMSProvider` and `TinaUI` for the user, leading to 0 breaking changes.
 
 ## Next.js Example
 
@@ -59,16 +59,17 @@ export function MyApp({Component, pageProps}) {
  
  return (
    <TinaCMSProvider cms={cms}>
-     {...}
+     <Component {...pageProps} />
    </TinaCMSProvider>
  )
 }
 ```
 
 ```
-export function Admin({editMode}) {
+export function Admin() {
   return (
-    <TinaUI editing={editMode}>
+    <TinaUI>
+      <EditButton />
       {...logic to render app}
     </TinaUIProvider>
   )
