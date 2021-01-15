@@ -68,7 +68,7 @@ export function MyApp({Component, pageProps}) {
 ```
 export function Admin({editMode}) {
   return (
-    <TinaUIProvider editing={editMode}>
+    <TinaUI editing={editMode}>
       {...logic to render app}
     </TinaUIProvider>
   )
