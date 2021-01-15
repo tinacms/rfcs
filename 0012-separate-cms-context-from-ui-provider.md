@@ -72,7 +72,7 @@ export function Admin() {
     <TinaUI>
       <EditButton />
       {...logic to render app}
-    </TinaUIProvider>
+    </TinaUI>
   )
 }
 ```
