@@ -15,11 +15,11 @@ const MyComponent = () => {
 }
 ```
 
-This creates an **implicit dependency** on `MyComponent`; your code will throw an error if `MyComponent` is not nested inside of an instance of `TinaProvider`. This is, in general, good defensive programming; however, we've discovered that "knowing if the user wants to be editing things right now" is pretty fundamental to a lot of decisions that a Tina-aware UI might need to make.
+This creates an **implicit dependency** within `MyComponent`; your code will throw an error if `MyComponent` is not nested inside of an instance of `TinaProvider`. This is, in general, good defensive programming; however, we've discovered that "knowing if the user wants to be editing things right now" is pretty fundamental to a lot of decisions that a Tina-aware UI might need to make.
 
 ### Event Bus as the Primary Thing-Doer
 
-Passing the CMS enabled state this way is trivial and marginally useful, but the real goal here is to hydrate the event bus using the same approach. I see the event bus as a needed "air gap" to allow components to understand and interact with Tina, such that code can be organized without concern toward whether a given component will ultimately be wrapped in a `TinaProvider`. This approach, then, provides an alternate solution to the problem described in https://github.com/tinacms/rfcs/pull/15/files
+Passing the CMS enabled state this way is trivial and marginally useful, but the real goal here is to hydrate the event bus using the same approach. I see the event bus as a needed "air gap" to allow components to understand and interact with Tina, such that code can be organized without concern toward whether a given component will ultimately be wrapped in a `TinaProvider`. This approach, then, provides an alternate solution to the problem described in https://github.com/tinacms/rfcs/pull/15
 
 ## API
 
