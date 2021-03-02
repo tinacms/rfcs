@@ -8,7 +8,7 @@ Tina's Content API is based on the Forestry schema configuration which was tradi
 
 Using JavaScript files would allow users to write their template definitions like the OSS Tina form configs, reducing the confusion and giving developers a familiar feel to what they might be used to.
 
-The trouble with using `.js/.ts` config is that our server would need to execute those files in order to know what the config is.While this is probably something we can do down the road, it's too large of an impact to take on right now.
+The trouble with using `.js/.ts` config is that our server would need to execute those files in order to know what the config is.While this is probably something we can do down the road, it's too large of an impact to take on right now. So I propose that we just add a cli command to compile `.ts/.js` files in the `.tina` folder to `.yml`.
 
 A definition would look like this:
 
