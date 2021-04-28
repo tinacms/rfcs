@@ -27,21 +27,23 @@ I think having a fixed layout, and a dynamic set of content is always going to h
 
 So, why do we have a fixed layout for a Tina site? (I.e, why does editing always happen on my prod deployment?)
 
-An alternative approach would be to have Tina accessible on your branch deployments.  Vercel or Netlify both can easily be added to a repo to deploy branches/PRs. 
-This way, the Tina site's expected schema within in layout will always match the content that it is loading.
+An alternative approach would be to have Tina accessible on your branch deployments.  Vercel or Netlify both can easily be added to a site to deploy each branch. 
+With this approach of editing on these dynamic Netlify/Vercel preview environments, the Tina site's expected schema within its layout will always match the content that it is rendering.
 
-This is almost possible now, however with most authentication providers, you need to set a consistent CallbackURL in the Oauth App.
+This approach is almost possible now, however with most authentication providers, you need to set a consistent CallbackURL in the Oauth App.
 E.g, when setting up the GitHub backend with Tina, you need to setup a GitHub OAuth app, which only lets you set a single domain.
 
-We could allow this type of workflow to work with Tina Cloud however. Once soluton might be to implement a Vercel/Netlify integration, which could handle dynamic CallbackURLs.
+We could however allow this type of workflow to work with Tina Cloud. One soluton might be to implement a Vercel/Netlify integration, which could handle dynamic CallbackURLs.
 That way, I could log in from:
 https://awkosock.vercel.app/
 And also:
 https://newbranch-awkosock.vercel.app/
 
+I don't think this approach will fit every use-case, but I also don't think all sites will need branching.
+
 ## Drawbacks
 - A user would need to create the branch outside of Tina, wait for it to deploy on Vercel or Netlify, & then
-edit on this preview URL. Editing no long happens on a constitent URL. (I think this friction could be mitigated by having a Forestry-lite'esqe wrapped that can load the preview in an iframe, but that's for another RFC).
+edit on this preview URL. Editing no long happens on a constitent URL. (I think this friction could eventually be mitigated by having a Forestry-lite'esqe wrapper that can load the preview in an iframe, but that's for another RFC).
 
 ## Unknowns:
 - Is the defined schema-content-mismatch problem big enough to warrant supporting this approach?
