@@ -1,0 +1,51 @@
+
+# Dynamic Tina Environments
+
+This RFC details an issue that can arrise with branching, and a potential alternate approach to Tina to avoid it. 
+
+## Problem
+
+When branching with tina, it's possible to run into what I'm calling...
+
+### The Schema-Content mismatch problem:
+
+Pretty much every use case I’ve heard of with Tina, The hosted Tina environment lives on one branch (It’s usually your production branch). When we talk about branching, with the (GitHub Backend solution), your Tina environment is fixed, but the content is fetched from a dynamic/switchable branch. 
+
+E,g, With Tinacms.org:
+- you always edit on tinacms.org (main branch).
+- you can however load content from any branch. 
+
+This leads to the possibility of an error, where your Tina preview’s template is expecting the content in one shape, but your content’s shape might not match (e.g, maybe a field has been renamed, which will cause the site to blow up when switching to that branch). 
+
+__Sidebar: As-is, having your editing environment blow up like this can be a big annoyance, because it essentially will block you from changing the branch in the toolbar.__
+
+This isn't a shared a problem for traditional CMS', because the Site preview is usually also dynamic. In Forestry, depending on the branch you are on, it will will always render the preview using a matching schema for its site-layout & its content.
+
+## Solution
+
+I think having a fixed layout, and a dynamic set of content is always going to have these problems outlined above.
+
+So, why do we have a fixed layout for a Tina site? (I.e, why does editing always happen on my prod deployment?)
+
+An alternative approach would be to have Tina accessible on your branch deployments.  Vercel or Netlify both can easily be added to a site to deploy each branch. 
+With this approach of editing on these dynamic Netlify/Vercel preview environments, the Tina site's expected schema within its layout will always match the content that it is rendering.
+
+This approach is almost possible now, however with most authentication providers, you need to set a consistent CallbackURL in the Oauth App.
+E.g, when setting up the GitHub backend with Tina, you need to setup a GitHub OAuth app, which only lets you set a single domain.
+
+We could however allow this type of workflow to work with Tina Cloud. One soluton might be to implement a Vercel/Netlify integration, which could handle dynamic CallbackURLs.
+That way, I could log in from:
+https://awkosock.vercel.app/
+And also:
+https://newbranch-awkosock.vercel.app/
+
+I don't think this approach will fit every use-case, but I also don't think all sites will need branching.
+
+## Drawbacks
+- A user would need to create the branch outside of Tina, wait for it to deploy on Vercel or Netlify, & then
+edit on this preview URL. Editing no long happens on a constitent URL. (I think this friction could eventually be mitigated by having a Forestry-lite'esqe wrapper that can load the preview in an iframe, but that's for another RFC).
+
+## Unknowns:
+- Is the defined schema-content-mismatch problem big enough to warrant supporting this approach?
+- What's involved in the Netlify/Vercel integrations within Tina Cloud.
+- Is the UX of editing on dybnamic URLs from preview-deployments too much friction? 
